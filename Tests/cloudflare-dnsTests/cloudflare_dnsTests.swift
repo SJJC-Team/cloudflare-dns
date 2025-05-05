@@ -14,13 +14,13 @@ struct Tests {
     }
     
     @Test func createNewRecord() async throws {
-        try await cloudflare.createRecord(.init(name: "test.test.test.whooshings.space", proxied: false, content: "111.93.29.60", comment: "", ttl: 60, type: .A))
+        try await cloudflare.createRecord(.init(.A, domain: "test.test.test.whooshings.space", to: "111.93.29.60", ttl: 60, proxied: false, comment: ""))
     }
     
     @Test func updateDNSRecord() async throws {
         let records = try await cloudflare.listRecords()
         let record = try #require(records.first { $0.name == "test.test.test.whooshings.space" })
-        try await cloudflare.updateRecord(.init(name: "test.testing.whooshings.space", proxied: false, content: "123.93.29.60", comment: "", ttl: 60, type: .A), id: record.id)
+        try await cloudflare.updateRecord(.init(.A, domain: "test.testing.whooshings.space", to: "123.93.29.60", ttl: 60, proxied: false, comment: ""), id: record.id)
         let newRecords: [DNSRecord] = try await cloudflare.listRecords()
         let _ = try #require(newRecords.first { $0.name == "test.testing.whooshings.space" })
     }

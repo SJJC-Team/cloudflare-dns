@@ -57,12 +57,28 @@ public struct DNSRecord: Decodable, CustomStringConvertible {
 }
 
 public struct DNSRecordPara: Encodable {
-    let name: String
-    let proxied: Bool
-    let content: String
-    let comment: String
-    let ttl: Int
-    let type: DNSRecord.DNSType
+    public let type: DNSRecord.DNSType
+    public let name: String
+    public let content: String
+    public let ttl: Int
+    public let proxied: Bool
+    public let comment: String
+    
+    public init(
+        _ type: DNSRecord.DNSType,
+        domain: String,
+        to content: String,
+        ttl: Int = 60,
+        proxied: Bool = false,
+        comment: String = ""
+    ) {
+        self.type = type
+        self.name = domain
+        self.content = content
+        self.ttl = ttl
+        self.proxied = proxied
+        self.comment = comment
+    }
 }
 
 public struct DNSDate: Codable, CustomStringConvertible {

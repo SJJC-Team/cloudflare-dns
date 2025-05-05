@@ -41,7 +41,7 @@ let cloudflare = Cloudflare(token: token, accountId: account_id, zoneId: zone_id
 #### [增] 创建一个 DNS 记录
 
 ```swift
-try await cloudflare.createRecord(.init(name: "testing.example.com", proxied: false, content: "123.123.123.123", comment: "", ttl: 60, type: .A))
+try await cloudflare.createRecord(.init(.A, domain: "testing.example.com", to: "123.123.123.123"))
 ```
 
 这个动作增加一个 `A` 类型的 DNS 记录，表示域名 `testing.example.com` 指向 `123.123.123.123` ipv4 地址
@@ -63,7 +63,7 @@ try await cloudflare.deleteRecord(record.id)
 #### [该] 更新一个 DNS 记录
 
 ```swift
-try await cloudflare.updateRecord(.init(name: "testing.example.com", proxied: false, content: "123.123.123.123", comment: "", ttl: 60, type: .A), id: record.id)
+try await cloudflare.updateRecord(.init(.A, domain: "testing.example.com", to: "123.123.123.123"), id: record.id)
 ```
 
 该动作将一条指定 `id` 的 DNS 记录更新为所提供的参数
