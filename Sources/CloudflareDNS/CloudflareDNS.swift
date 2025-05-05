@@ -1,5 +1,5 @@
 import Foundation
-#if os(linux)
+#if os(Linux)
 import FoundationNetworking
 #endif
 
