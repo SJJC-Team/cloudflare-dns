@@ -1,4 +1,5 @@
 import Foundation
+import FoundationNetworking
 
 public struct Cloudflare {
     
