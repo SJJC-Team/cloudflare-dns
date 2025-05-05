@@ -24,6 +24,12 @@ Swift 编写的 Cloudflare DNS 库，用于编辑 Cloudflare 的域名 DNS 记�
 
 ### 使用
 
+导入该依赖库
+
+```swift
+import CloudflareDNS
+```
+
 初始化一个 `Cloudflare` 对象:
 
 ```swift
