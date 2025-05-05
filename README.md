@@ -6,7 +6,7 @@ Swift 编写的 Cloudflare DNS 库，用于编辑 Cloudflare 的域名 DNS 记�
 在 `Package.swift` 中添加依赖：
 
 ```swift
-.package(url: "https://github.com/SJJC-Team/cloudflare-dns.git", from: "1.0.1")
+.package(url: "https://github.com/SJJC-Team/cloudflare-dns.git", from: "1.0.3")
 ```
 
 为 `Target` 设置依赖：
