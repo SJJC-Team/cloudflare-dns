@@ -1,5 +1,7 @@
 import Foundation
+#if os(linux)
 import FoundationNetworking
+#endif
 
 public struct Cloudflare {
     
@@ -7,7 +9,7 @@ public struct Cloudflare {
     public let accountId: String
     public let zoneId: String
     
-    init(token: String, accountId: String, zoneId: String) {
+    public init(token: String, accountId: String, zoneId: String) {
         self.token = token
         self.accountId = accountId
         self.zoneId = zoneId
