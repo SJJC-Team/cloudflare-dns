@@ -15,7 +15,7 @@ Swift 编写的 Cloudflare DNS 库，用于编辑 Cloudflare 的域名 DNS 记�
 .target(
     name: "XXXX",
     dependencies: [
-			.product(name: "CloudflareDNS", package: "cloudflare-dns")
+	.product(name: "CloudflareDNS", package: "cloudflare-dns")
     ]
 )
 ```
