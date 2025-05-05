@@ -1,8 +1,5 @@
 import Foundation
 
-//curl -X GET "https://api.cloudflare.com/client/v4/zones/5d5c5ab858cc6f55d1dc2b3cdafed0d0/dns_records" \
-//-H "Content-Type:application/json" \
-//-H "Authorization: Bearer F5R1LK9scqN3Q_ewvQAkoE502g1VBBafZo2zucI0"
 public struct Cloudflare {
     
     public let token: String

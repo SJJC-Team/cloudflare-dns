@@ -1,3 +1,5 @@
+import Foundation
+
 enum Err: String, Error, CustomStringConvertible {
     case invalidURL = "URL 无效"
     case requestFailed = "URL 请求时出现错误"
