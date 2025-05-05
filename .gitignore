@@ -468,3 +468,4 @@ DerivedData/
 # End of https://www.toptal.com/developers/gitignore/api/swift,swiftpm,xcode,node,vapor,macos,linux,windows,objective-c,vue,nuxtjs,database,web,visualstudiocode,yarn,git
 
 *.drawio.bkp
+Tests/cloudflare-dnsTests/Env.swift

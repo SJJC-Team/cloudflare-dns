@@ -5,20 +5,23 @@ import PackageDescription
 
 let package = Package(
     name: "cloudflare-dns",
+    platforms: [
+       .macOS(.v13)
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "cloudflare-dns",
-            targets: ["cloudflare-dns"]),
+            name: "CloudflareDNS",
+            targets: ["CloudflareDNS"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "cloudflare-dns"),
+            name: "CloudflareDNS"),
         .testTarget(
-            name: "cloudflare-dnsTests",
-            dependencies: ["cloudflare-dns"]
+            name: "CloudflareDNSTests",
+            dependencies: ["CloudflareDNS"]
         ),
     ]
 )
