@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DNSRecord: Decodable, CustomStringConvertible {
+public struct DNSRecord: Decodable, CustomStringConvertible, Sendable {
     
     public typealias ID = String
     
@@ -17,7 +17,7 @@ public struct DNSRecord: Decodable, CustomStringConvertible {
     public let created_on: DNSDate
     public let modified_on: DNSDate
     
-    public struct Settings: Codable {
+    public struct Settings: Codable, Sendable {
         let ipv4Only: Bool?
         let ipv6Only: Bool?
 
@@ -27,7 +27,7 @@ public struct DNSRecord: Decodable, CustomStringConvertible {
         }
     }
     
-    public enum DNSType: String, Codable {
+    public enum DNSType: String, Codable, Sendable {
         case A = "A"
         case AAAA = "AAAA"
         case CAA = "CAA"
@@ -56,7 +56,7 @@ public struct DNSRecord: Decodable, CustomStringConvertible {
     }
 }
 
-public struct DNSRecordPara: Encodable {
+public struct DNSRecordPara: Encodable, Sendable {
     public let type: DNSRecord.DNSType
     public let name: String
     public let content: String
@@ -64,7 +64,7 @@ public struct DNSRecordPara: Encodable {
     public let proxied: Bool
     public let comment: String
     
-    public init(
+    @Sendable public init(
         _ type: DNSRecord.DNSType,
         domain: String,
         to content: String,
@@ -81,14 +81,14 @@ public struct DNSRecordPara: Encodable {
     }
 }
 
-public struct DNSDate: Codable, CustomStringConvertible {
+public struct DNSDate: Codable, CustomStringConvertible, Sendable {
     public let date: Date
 
     public init(date: Date) {
         self.date = date
     }
 
-    public init(from decoder: Decoder) throws {
+    @Sendable public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let dateString = try container.decode(String.self)
         let formatter = ISO8601DateFormatter()
@@ -102,7 +102,7 @@ public struct DNSDate: Codable, CustomStringConvertible {
         self.date = date
     }
 
-    public func encode(to encoder: Encoder) throws {
+    @Sendable public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

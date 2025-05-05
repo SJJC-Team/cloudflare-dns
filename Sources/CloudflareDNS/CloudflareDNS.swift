@@ -3,7 +3,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-public struct Cloudflare {
+public struct Cloudflare : Sendable {
     
     public let token: String
     public let accountId: String
@@ -15,7 +15,7 @@ public struct Cloudflare {
         self.zoneId = zoneId
     }
     
-    public func listRecords() async throws -> [DNSRecord] {
+    @Sendable public func listRecords() async throws -> [DNSRecord] {
         let urlString = "https://api.cloudflare.com/client/v4/zones/\(zoneId)/dns_records"
         guard let url = URL(string: urlString) else { throw Err.invalidURL }
         var req = URLRequest(url: url)
@@ -26,7 +26,7 @@ public struct Cloudflare {
         return result.result
     }
     
-    public func createRecord(_ record: DNSRecordPara) async throws {
+    @Sendable public func createRecord(_ record: DNSRecordPara) async throws {
         let urlString = "https://api.cloudflare.com/client/v4/zones/\(zoneId)/dns_records"
         guard let url = URL(string: urlString) else { throw Err.invalidURL }
         var req = URLRequest(url: url)
@@ -44,7 +44,7 @@ public struct Cloudflare {
         }
     }
     
-    public func deleteRecord(_ id: DNSRecord.ID) async throws {
+    @Sendable public func deleteRecord(_ id: DNSRecord.ID) async throws {
         let urlString = "https://api.cloudflare.com/client/v4/zones/\(zoneId)/dns_records/\(id)"
         guard let url = URL(string: urlString) else { throw Err.invalidURL }
         var req = URLRequest(url: url)
@@ -57,7 +57,7 @@ public struct Cloudflare {
         }
     }
     
-    public func updateRecord(_ record: DNSRecordPara, id: DNSRecord.ID) async throws {
+    @Sendable public func updateRecord(_ record: DNSRecordPara, id: DNSRecord.ID) async throws {
         let urlString = "https://api.cloudflare.com/client/v4/zones/\(zoneId)/dns_records/\(id)"
         guard let url = URL(string: urlString) else { throw Err.invalidURL }
         var req = URLRequest(url: url)
@@ -78,7 +78,7 @@ public struct Cloudflare {
 }
 
 extension URLSession {
-    func sendRequest<T: Decodable>(_ request: URLRequest) async throws -> T {
+    @Sendable func sendRequest<T: Decodable>(_ request: URLRequest) async throws -> T {
         let (data, response) = try await self.data(for: request)
         
         guard response is HTTPURLResponse else {

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Result<T>: Decodable where T: Decodable {
+public struct Result<T>: Decodable, Sendable where T: Decodable, T: Sendable {
     let result: T!
     let success: Bool
     let errors: [ResultError]
@@ -16,6 +16,6 @@ public struct ResultError: Decodable, Sendable, CustomStringConvertible {
     }
 }
 
-public struct DeleteResult: Decodable {
+public struct DeleteResult: Decodable, Sendable {
     public let id: DNSRecord.ID
 }
