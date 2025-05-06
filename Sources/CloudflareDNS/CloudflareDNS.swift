@@ -26,7 +26,7 @@ public struct Cloudflare : Sendable {
         return result.result
     }
     
-    @Sendable public func createRecord(_ record: DNSRecordPara) async throws {
+    @Sendable public func createRecord(_ record: DNSRecordPara) async throws -> DNSRecord {
         let urlString = "https://api.cloudflare.com/client/v4/zones/\(zoneId)/dns_records"
         guard let url = URL(string: urlString) else { throw Err.invalidURL }
         var req = URLRequest(url: url)
@@ -42,9 +42,10 @@ public struct Cloudflare : Sendable {
         guard res.success else {
             throw NetworkErr.responseError(msg: res.errors)
         }
+        return res.result
     }
     
-    @Sendable public func deleteRecord(_ id: DNSRecord.ID) async throws {
+    @Sendable public func deleteRecord(_ id: DNSRecord.ID) async throws -> DNSRecord.ID {
         let urlString = "https://api.cloudflare.com/client/v4/zones/\(zoneId)/dns_records/\(id)"
         guard let url = URL(string: urlString) else { throw Err.invalidURL }
         var req = URLRequest(url: url)
@@ -55,9 +56,10 @@ public struct Cloudflare : Sendable {
         guard res.success else {
             throw NetworkErr.responseError(msg: res.errors)
         }
+        return res.result.id
     }
     
-    @Sendable public func updateRecord(_ record: DNSRecordPara, id: DNSRecord.ID) async throws {
+    @Sendable public func updateRecord(_ record: DNSRecordPara, id: DNSRecord.ID) async throws -> DNSRecord {
         let urlString = "https://api.cloudflare.com/client/v4/zones/\(zoneId)/dns_records/\(id)"
         guard let url = URL(string: urlString) else { throw Err.invalidURL }
         var req = URLRequest(url: url)
@@ -73,6 +75,7 @@ public struct Cloudflare : Sendable {
         guard res.success else {
             throw NetworkErr.responseError(msg: res.errors)
         }
+        return res.result
     }
     
 }

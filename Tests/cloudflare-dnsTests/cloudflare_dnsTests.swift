@@ -1,6 +1,10 @@
 import Testing
 @testable import CloudflareDNS
 
+class SharedState {
+    nonisolated(unsafe) static var id: DNSRecord.ID? = nil
+}
+
 @Suite(.serialized)
 struct Tests {
     
@@ -13,14 +17,15 @@ struct Tests {
         }
     }
     
-    @Test func createNewRecord() async throws {
-        try await cloudflare.createRecord(.init(.A, domain: "test.test.test.whooshings.space", to: "111.93.29.60", ttl: 60, proxied: false, comment: ""))
+    @Test mutating func createNewRecord() async throws {
+        SharedState.id = try await cloudflare.createRecord(.init(.A, domain: "test.test.test.whooshings.space", to: "111.93.29.60", ttl: 60, proxied: false, comment: "")).id
     }
     
-    @Test func updateDNSRecord() async throws {
+    @Test mutating func updateDNSRecord() async throws {
         let records = try await cloudflare.listRecords()
         let record = try #require(records.first { $0.name == "test.test.test.whooshings.space" })
-        try await cloudflare.updateRecord(.init(.A, domain: "test.testing.whooshings.space", to: "123.93.29.60", ttl: 60, proxied: false, comment: ""), id: record.id)
+        #expect(record.id == SharedState.id)
+        SharedState.id = try await cloudflare.updateRecord(.init(.A, domain: "test.testing.whooshings.space", to: "123.93.29.60", ttl: 60, proxied: false, comment: ""), id: record.id).id
         let newRecords: [DNSRecord] = try await cloudflare.listRecords()
         let _ = try #require(newRecords.first { $0.name == "test.testing.whooshings.space" })
     }
@@ -28,7 +33,8 @@ struct Tests {
     @Test func deleteDNSRecord() async throws {
         let records = try await cloudflare.listRecords()
         let record = try #require(records.first { $0.name == "test.testing.whooshings.space" })
-        try await cloudflare.deleteRecord(record.id)
+        #expect(record.id == SharedState.id)
+        let _ = try await cloudflare.deleteRecord(record.id)
         let newRecords: [DNSRecord] = try await cloudflare.listRecords()
         #expect(newRecords.first { $0.name == "test.testing.whooshings.space" } == nil)
     }

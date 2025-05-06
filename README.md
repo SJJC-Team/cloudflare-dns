@@ -6,7 +6,9 @@ Swift 编写的 Cloudflare DNS 库，用于编辑 Cloudflare 的域名 DNS 记�
 在 `Package.swift` 中添加依赖：
 
 ```swift
-.package(url: "https://github.com/SJJC-Team/cloudflare-dns.git", from: "1.0.3")
+dependencies: [
+    .package(url: "https://github.com/SJJC-Team/cloudflare-dns.git", .upToNextMajor(from: "1.0.5"))
+]
 ```
 
 为 `Target` 设置依赖：
@@ -15,7 +17,7 @@ Swift 编写的 Cloudflare DNS 库，用于编辑 Cloudflare 的域名 DNS 记�
 .target(
     name: "XXXX",
     dependencies: [
-	.product(name: "CloudflareDNS", package: "cloudflare-dns")
+        .product(name: "CloudflareDNS", package: "cloudflare-dns")
     ]
 )
 ```
@@ -48,7 +50,7 @@ try await cloudflare.createRecord(.init(.A, domain: "testing.example.com", to: "
 
 > DNS 记录类型枚举见 [DNSRecord.swift](Sources/CloudflareDNS/DNSRecord.swift) 的 `DNSRecord.DNSType`
 >
-> 该函数无返回值，如果失败会抛出错误
+> 该函数会返回创建的 DNS 记录，如果失败会抛出错误
 
 #### [删] 删除一个 DNS 记录
 
@@ -58,7 +60,7 @@ try await cloudflare.deleteRecord(record.id)
 
 删除一条指定 `id` 的 DNS 记录，如果 DNS 记录中不包含该 `id` 的记录，则会抛出错误
 
-> 该函数无返回值，如果失败会抛出错误
+> 该函数会返回被删除的 DNS 记录的 ID，如果失败会抛出错误
 
 #### [该] 更新一个 DNS 记录
 
@@ -68,7 +70,7 @@ try await cloudflare.updateRecord(.init(.A, domain: "testing.example.com", to: "
 
 该动作将一条指定 `id` 的 DNS 记录更新为所提供的参数
 
-> 该函数无返回值，如果失败会抛出错误
+> 该函数会返回更新完成的 DNS 记录，如果失败会抛出错误
 
 #### [查] 查询 DNS 记录
 
