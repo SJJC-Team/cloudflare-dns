@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  release-and-package-wsm:
+  release-and-package-certi:
     uses: SJJC-Team/ci/.github/workflows/release.yml@develop
     with:
       work_dir: "certi"
