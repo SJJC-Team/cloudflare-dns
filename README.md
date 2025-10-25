@@ -62,7 +62,7 @@ try await cloudflare.deleteRecord(record.id)
 
 > 该函数会返回被删除的 DNS 记录的 ID，如果失败会抛出错误
 
-#### [该] 更新一个 DNS 记录
+#### [改] 更新一个 DNS 记录
 
 ```swift
 try await cloudflare.updateRecord(.init(.A, domain: "testing.example.com", to: "123.123.123.123"), id: record.id)
