@@ -1,0 +1,14 @@
+name: Certi Release and Package Workflow
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release-and-package-wsm:
+    uses: SJJC-Team/ci/.github/workflows/release.yml@develop
+    with:
+      work_dir: "certi"
+      app_name: "certi"
+    secrets:
+      RELEASE_ACCESS: ${{ secrets.CLWANG_RELEASE_ACCESS }}
