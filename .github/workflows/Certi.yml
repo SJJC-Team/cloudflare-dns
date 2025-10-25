@@ -1,4 +1,4 @@
-name: Ubuntu Workflow
+name: Certi Workflow
 
 on:
   push:
@@ -13,23 +13,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # Cache Swift build artifacts and dependencies
-    - name: Cache Swift dependencies
+    # Cache Swift dependencies for certi project
+    - name: Cache Swift dependencies (certi)
       uses: actions/cache@v4.2.0
       with:
         path: |
           ~/.swiftpm
-          .build
           certi/.build
-        key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.swift') }}
+        key: ${{ runner.os }}-swift-certi-${{ hashFiles('certi/Package.swift') }}
         restore-keys: |
-          ${{ runner.os }}-swift-
+          ${{ runner.os }}-swift-certi-
 
-    # Build main project
-    - name: Build main project
-      run: swift build -v
-
-    # Build certi subproject
+    # Build the certi project
     - name: Build certi project
       working-directory: certi
       run: swift build -v
