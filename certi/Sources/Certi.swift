@@ -29,7 +29,8 @@ struct Certi: ParsableCommand {
         """,
         subcommands: [
             Initialize.self,
-            DomainRegister.self
+            DomainRegister.self,
+            DomainDelete.self
         ]
     )
 }

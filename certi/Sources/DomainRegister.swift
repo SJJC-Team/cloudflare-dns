@@ -5,7 +5,7 @@ import CloudflareDNS
 struct DomainRegister: ParsableCommand {
 
     static let configuration = CommandConfiguration(
-        abstract: "在 cloudflare 中注册所给定的域名，且自动更新 nginx 配置文件",
+        abstract: "在 cloudflare 中注册所给定的域名，使用 Acme.sh 申请证书，且自动更新 nginx 配置文件",
         aliases: ["dr"]
     )
 
@@ -14,7 +14,7 @@ struct DomainRegister: ParsableCommand {
     @Option(name: .shortAndLong, help: "该域名指向的计算机 ip 地址，若不指定，默认为本机地址") var ipAddress: String? = nil
     @Flag(name: .shortAndLong, help: "是否申请泛域名") var wildcard = false
     @Flag(name: .shortAndLong, help: "强制申请新证书，尽管已经有同域名证书") var force = false
-    @Flag(name: [.customLong("onlyHttp"), .customShort("n")], help: "是否配置 HTTPS 加密") var onlyHttp = false
+    @Flag(name: [.customLong("only-http"), .customShort("n")], help: "是否配置 HTTPS 加密") var onlyHttp = false
 
     func run() throws {
         let cf = Cloudflare(
@@ -33,7 +33,7 @@ struct DomainRegister: ParsableCommand {
                 to: ip
             ))
         }
-        print("域名 \"\(fullDomain)\" CloudFlare DNS 记录注册完成".info)
+        print("[CloudFlare] 域名 \"\(fullDomain)\" DNS 记录注册完成".info)
 
         if wildcard {
             _ = try waitAsync {
@@ -43,7 +43,7 @@ struct DomainRegister: ParsableCommand {
                     to: ip
                 ))
             }
-            print("域名 \"*.\(fullDomain)\" CloudFlare DNS 记录注册完成".info)
+            print("[CloudFlare] 域名 \"*.\(fullDomain)\" DNS 记录注册完成".info)
         }
 
         try Sh.Acme.create(

@@ -1,21 +1,21 @@
 import Foundation
 
-final class ResultBox<T> {
-    var value: Result<T, Error>? = nil
+final class ResultBox<T, G: Error> {
+    var value: Result<T, G>? = nil
     init() {}
 }
 extension ResultBox: @unchecked Sendable {}
 
-func waitAsync<T>(_ operation: @Sendable @escaping () async throws -> T) throws -> T {
+func waitAsync<T, G>(_ operation: @Sendable @escaping () async throws(G) -> T) throws(G) -> T {
     let semaphore = DispatchSemaphore(value: 0)
-    let box = ResultBox<T>()
+    let box = ResultBox<T, G>()
 
     Task {
         do {
             let value = try await operation()
             box.value = .success(value)
-        } catch {
-            box.value = .failure(error)
+        } catch let error {
+            box.value = .failure(error as! G)
         }
         semaphore.signal()
     }
