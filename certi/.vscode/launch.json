@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:certi}",
+            "name": "Debug certi",
+            "program": "${workspaceFolder:certi}/.build/debug/certi",
+            "preLaunchTask": "swift: Build Debug certi"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:certi}",
+            "name": "Release certi",
+            "program": "${workspaceFolder:certi}/.build/release/certi",
+            "preLaunchTask": "swift: Build Release certi"
+        }
+    ]
+}

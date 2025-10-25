@@ -5,6 +5,7 @@ import SwiftDotenv
 @main
 struct Certi: ParsableCommand {
     static let envPath = "/etc/certi/env"
+    static let acmePath = "/root/.acme.sh"
     static let env: Env = {
         do {
             let e = try Env()
@@ -14,8 +15,23 @@ struct Certi: ParsableCommand {
             fatalError(err.localizedDescription)
         }
     }()
-    
-    @Argument(help: "域名，不加顶级域名 \(Certi.env.cfToken)") var module: String
+
+    static let configuration = CommandConfiguration(
+        abstract: "提供证书以及域名相关的设置，该脚本自动连接 CloudFlare，且将自动调整 Nginx 配置文件",
+        discussion: """
+        当前作用配置:
+
+            根域名: \(env.rootDomain)
+            Nginx 配置文件目录: \(env.nginxDir)
+            acme 工具目录: \(acmePath)
+
+            环境配置文件: \(envPath)
+        """,
+        subcommands: [
+            Initialize.self,
+            DomainRegister.self
+        ]
+    )
 }
 
 struct Env {
@@ -31,9 +47,9 @@ struct Env {
 
     var envs: [String: String] {
         [
-            "CERTI_CF_Token": cfToken,
-            "CERTI_CF_Account_ID": cfAccountId,
-            "CERTI_CF_Zone_ID": cfZoneId,
+            "CF_Token": cfToken,
+            "CF_Account_ID": cfAccountId,
+            "CF_Zone_ID": cfZoneId,
             "CERTI_NGINX_DIR": nginxDir,
             "CERTI_ROOT_DOMAIN": rootDomain
         ]
@@ -42,9 +58,9 @@ struct Env {
     init() throws {
         try Dotenv.configure(atPath: Certi.envPath)
         guard
-            let cfToken = ProcessInfo.processInfo.environment["CERTI_CF_Token"],
-            let cfAccountId = ProcessInfo.processInfo.environment["CERTI_CF_Account_ID"],
-            let cfZoneId = ProcessInfo.processInfo.environment["CERTI_CF_Zone_ID"],
+            let cfToken = ProcessInfo.processInfo.environment["CF_Token"],
+            let cfAccountId = ProcessInfo.processInfo.environment["CF_Account_ID"],
+            let cfZoneId = ProcessInfo.processInfo.environment["CF_Zone_ID"],
             let nginxDir = ProcessInfo.processInfo.environment["CERTI_NGINX_DIR"],
             let rootDomain = ProcessInfo.processInfo.environment["CERTI_ROOT_DOMAIN"]
         else { throw Err.envErr }
