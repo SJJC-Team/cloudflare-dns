@@ -9,7 +9,7 @@ struct DomainRegister: ParsableCommand {
         aliases: ["dr"]
     )
 
-    @Option(name: .shortAndLong, help: "要注册的域名，勿重复输入根域名。根域名为: \"\(Certi.env.rootDomain)\"") var domain: String
+    @Option(name: .shortAndLong, help: "要注册的域名，勿重复输入根域名。根域名为: \"\(Certi.env.rootDomain)\"") var domain: String = ""
     @Option(name: .shortAndLong, help: "该域名的转发端口") var port: Int
     @Option(name: .shortAndLong, help: "该域名指向的计算机 ip 地址，若不指定，默认为本机地址") var ipAddress: String? = nil
     @Flag(name: .shortAndLong, help: "是否申请泛域名") var wildcard = false
@@ -24,7 +24,7 @@ struct DomainRegister: ParsableCommand {
         )
 
         let ip =  try ipAddress ?? waitAsync { try await getPublicIPAddress() }
-        let fullDomain = domain + "." + Certi.env.rootDomain
+        let fullDomain = domain == "" ? Certi.env.rootDomain : (domain + "." + Certi.env.rootDomain)
 
         _ = try waitAsync {
             try await cf.createRecord(.init(

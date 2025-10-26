@@ -9,7 +9,7 @@ struct DomainDelete: ParsableCommand {
         aliases: ["dd"]
     )
 
-    @Option(name: .shortAndLong, help: "要删除的域名，勿重复输入根域名。根域名为: \"\(Certi.env.rootDomain)\"") var domain: String
+    @Option(name: .shortAndLong, help: "要删除的域名，勿重复输入根域名。根域名为: \"\(Certi.env.rootDomain)\"") var domain: String = ""
 
     func run() throws {
         let cf = Cloudflare(
@@ -19,7 +19,7 @@ struct DomainDelete: ParsableCommand {
         )
 
         let records = try waitAsync { try await cf.listRecords() }
-        let fullDomain = domain + "." + Certi.env.rootDomain
+        let fullDomain = domain == "" ? Certi.env.rootDomain : (domain + "." + Certi.env.rootDomain)
 
         var count = 0
 
